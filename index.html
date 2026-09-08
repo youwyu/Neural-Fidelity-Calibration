@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Neural Fidelity Calibration uses conditional diffusion models to calibrate simulation dynamics and adapt robot policies online in challenging real-world conditions.">
+  <title>Neural Fidelity Calibration for Informative Sim-to-Real Adaptation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700|Noto+Sans:400,500,600,700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script defer src="./static/js/overview.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#overview">Skip to content</a>
+
+  <header class="publication-header">
+    <div class="page-container">
+      <h1 class="publication-title">
+        Neural Fidelity Calibration
+        <span class="publication-subtitle">for Informative Sim-to-Real Adaptation</span>
+      </h1>
+      <figure class="publication-teaser">
+        <img src="./static/images/offroad-res-env.png" width="2540" height="540" fetchpriority="high" alt="A reconstructed off-road environment and terrain variations sampled with Neural Fidelity Calibration.">
+      </figure>
+      <div class="publication-links" aria-label="Research resources">
+        <span class="resource-link is-pending"><i class="fas fa-file-alt" aria-hidden="true"></i><span>Paper <span class="resource-status">coming soon</span></span></span>
+        <a class="resource-link is-primary" href="https://youtu.be/JGZnyBO5N9I"><i class="fab fa-youtube" aria-hidden="true"></i><span>Video</span></a>
+        <a class="resource-link is-primary" href="https://github.com/youwyu/NFC"><i class="fab fa-github" aria-hidden="true"></i><span>Code</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="paper-section overview-section" id="overview" aria-labelledby="overview-title">
+      <div class="page-container">
+        <h2 id="overview-title">Can a robot adapt when its simulator falls short?</h2>
+        <div class="overview-tabs" aria-label="About Neural Fidelity Calibration" hidden>
+          <button type="button" id="summary-tab" aria-controls="summary-panel">Overview</button>
+          <button type="button" id="method-tab" aria-controls="method-panel">How it works</button>
+        </div>
+
+        <div class="explanation-panel" id="summary-panel">
+          <div class="overview-copy">
+            <p><strong>Problem.</strong> Tuning mass or friction cannot fix everything a simulator gets wrong. Unmodeled dynamics and errors in perceived terrain still leave a gap that limits policy adaptation.</p>
+            <p><strong>Method.</strong> Neural Fidelity Calibration jointly infers simulator parameters and <em>residual fidelity</em>: the remaining dynamics and environment discrepancies. A conditional diffusion model samples plausible simulation domains from real experience, and the robot fine-tunes its policy when an anomaly is detected.</p>
+            <p><strong>Result.</strong> On rough real-world terrain with a broken wheel axle, PPO with NFC achieves <strong class="result-highlight">72% success</strong>, compared with 25% without NFC and 53% with calibration alone.</p>
+          </div>
+        </div>
+
+        <div class="explanation-panel" id="method-panel">
+          <figure class="method-figure">
+            <a class="figure-link" href="./static/images/system.png" target="_blank" rel="noopener" aria-label="Open the NFC system diagram at full resolution in a new tab">
+              <img src="./static/images/system.png" width="8850" height="3086" loading="lazy" alt="NFC adaptation loop: infer residual dynamics and environment corrections, calibrate simulator physics, execute the policy in reality, and trigger adaptation when an anomaly is detected.">
+            </a>
+            <figcaption>Calibrate what the simulator can explain. Learn the residual of what it cannot.</figcaption>
+          </figure>
+          <ol class="method-steps">
+            <li>
+              <h3>Calibrate the physics</h3>
+              <p>Use the robot’s recent trajectory to infer physical parameters, such as wheel friction and damping, with a conditional diffusion model.</p>
+            </li>
+            <li>
+              <h3>Account for the residual</h3>
+              <p>Jointly infer unmodeled motion and terrain corrections in a compact latent space, capturing uncertainty beyond simulator parameters.</p>
+            </li>
+            <li>
+              <h3>Adapt when needed</h3>
+              <p>When an anomaly is detected, fine-tune the policy in sampled simulation domains. Refine NFC sequentially as new experience arrives.</p>
+            </li>
+          </ol>
+          <p class="method-note"><strong>When uncertainty is high,</strong> a learned “hallucination” policy adjusts the spread of simulated domains to support policy improvement. It acts only in simulation.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper-section experiments-section" id="experiments" aria-labelledby="experiments-title">
+      <div class="page-container">
+        <div class="section-heading">
+          <h2 id="experiments-title">Sim-to-Real Adaptation Experiments</h2>
+          <p>The front left wheel axle is broken in every experiment.</p>
+        </div>
+        <div class="experiment-grid">
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Lab surface">
+              <source src="./static/videos/Front Left Wheel Axle Broken.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken.mp4">Watch the lab surface experiment</a>.
+            </video>
+            <figcaption>Lab surface</figcaption>
+          </figure>
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Diverse lab surfaces">
+              <source src="./static/videos/Front Left Wheel Axle Broken on Diverse Lab Surfaces.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken on Diverse Lab Surfaces.mp4">Watch the diverse lab surfaces experiment</a>.
+            </video>
+            <figcaption>Diverse lab surfaces</figcaption>
+          </figure>
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Loose rock &amp; diverse lab surfaces">
+              <source src="./static/videos/Front Left Wheel Axle Broken with Rock on Diverse Lab Surfaces.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken with Rock on Diverse Lab Surfaces.mp4">Watch the loose rock &amp; diverse lab surfaces experiment</a>.
+            </video>
+            <figcaption>Loose rock &amp; diverse lab surfaces</figcaption>
+          </figure>
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Wet grass &amp; snowy terrain">
+              <source src="./static/videos/Front Left Wheel Axle Broken on Wet Grass and Snowy Terrain.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken on Wet Grass and Snowy Terrain.mp4">Watch the wet grass &amp; snowy terrain experiment</a>.
+            </video>
+            <figcaption>Wet grass &amp; snowy terrain</figcaption>
+          </figure>
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Elevated wet grass &amp; snowy terrain">
+              <source src="./static/videos/Front Left Wheel Axle Broken on Elevated Wet Grass and Snowy Terrain.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken on Elevated Wet Grass and Snowy Terrain.mp4">Watch the elevated wet grass &amp; snowy terrain experiment</a>.
+            </video>
+            <figcaption>Elevated wet grass &amp; snowy terrain</figcaption>
+          </figure>
+          <figure class="experiment">
+            <video controls autoplay muted loop playsinline preload="metadata" width="3840" height="2160" aria-label="Sim-to-real adaptation: Muddy &amp; snowy forest">
+              <source src="./static/videos/Front Left Wheel Axle Broken in Muddy and Snowy Forest.mp4" type="video/mp4">
+              <a href="./static/videos/Front Left Wheel Axle Broken in Muddy and Snowy Forest.mp4">Watch the muddy &amp; snowy forest experiment</a>.
+            </video>
+            <figcaption>Muddy &amp; snowy forest</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="paper-section results-section" id="results" aria-labelledby="results-title">
+      <div class="page-container">
+        <h2 id="results-title">Neural Fidelity Calibration Results</h2>
+        <figure class="results-figure">
+          <a class="figure-link" href="./static/images/posterior.png" target="_blank" rel="noopener" aria-label="Open the calibration results figure at full resolution in a new tab">
+            <img src="./static/images/posterior.png" width="9267" height="3549" loading="lazy" alt="Posterior distributions for quadruped, humanoid, quadcopter, and Jackal robots, comparing simulator calibration methods in flat and rough environments alongside residual dynamics and environment fidelity.">
+          </a>
+          <figcaption>
+            <p class="figure-note">Parameter pairs shown in each row, from top to bottom. Select the figure to enlarge.</p>
+            <dl class="result-labels">
+              <div><dt>Quadruped</dt><dd>Rear front shank mass vs. right rear shank mass</dd></div>
+              <div><dt>Humanoid</dt><dd>Torso mass vs. right hip stiffness</dd></div>
+              <div><dt>Quadcopter</dt><dd>First rotor mass vs. third rotor arm mass</dd></div>
+              <div><dt>Jackal</dt><dd>Rear right wheel damping vs. front left wheel restitution</dd></div>
+            </dl>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Page template borrowed from <a href="https://nerfies.github.io/">Nerfies</a>.</p>
+  </footer>
+</body>
+</html>
