@@ -1,0 +1,19 @@
+{
+  "presentation": "detail views without insets",
+  "insets": false,
+  "size": [
+    2160,
+    720
+  ],
+  "fps": 24,
+  "frames": 384,
+  "terrain_size_m": [
+    12.8,
+    12.8
+  ],
+  "robot_scale": 1.0,
+  "source_paths": [
+    "/tmp/nfc-full-grid-final/chrono-snow.mp4",
+    "/tmp/nfc-full-grid-final/domains.mp4"
+  ]
+}
